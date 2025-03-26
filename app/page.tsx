@@ -27,7 +27,6 @@ export default function Home() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([])
   const [optionArguments, setOptionArguments] = useState<OptionArgument[]>([])
   const [commandHistory, setCommandHistory] = useState<string[]>([])
-  // const [commandOutput, setCommandOutput] = useState("")
   const [error, setError] = useState("")
   const [isExecuting, setIsExecuting] = useState(false)
   const [livePreview, setLivePreview] = useState("")
@@ -78,6 +77,17 @@ export default function Home() {
     // Start with the base command
     let command = selectedCommand
 
+    // Format arguments if needed
+    let formattedArgs = arguments_
+    if (commandData[selectedCommand]?.formatArgs && arguments_.trim()) {
+      formattedArgs = commandData[selectedCommand].formatArgs(arguments_)
+    }
+
+    // Add main arguments if any
+    if (formattedArgs.trim()) {
+      command += ` ${formattedArgs}`
+    }
+
     // Add options with their arguments if needed
     selectedOptions.forEach((option) => {
       const optionData = commandData[selectedCommand]?.options.find((opt) => opt.flag === option)
@@ -96,36 +106,12 @@ export default function Home() {
       }
     })
 
-    // Format arguments if needed
-    let formattedArgs = arguments_
-    if (commandData[selectedCommand]?.formatArgs && arguments_.trim()) {
-      formattedArgs = commandData[selectedCommand].formatArgs(arguments_)
-    }
-
-    // Add main arguments if any
-    if (formattedArgs.trim()) {
-      command += ` ${formattedArgs}`
-    }
+    
 
     return command.trim()
   }
 
-  // const previewCommand = () => {
-  //   const command = constructCommand()
-  //   if (!command) {
-  //     setError("Please select a command first")
-  //     return
-  //   }
-
-  //   const validationError = validateCommand(command)
-  //   if (validationError) {
-  //     setError(validationError)
-  //     return
-  //   }
-
-  //   setCommandOutput(`Preview: ${command}`)
-  //   setError("")
-  // }
+ 
 
   const runCommand = async () => {
     const command = constructCommand()
@@ -144,8 +130,6 @@ export default function Home() {
     setError("")
 
     try {
-      // const output = await executeCommand(command)
-      // // setCommandOutput(output)
       setCommandHistory((prev) => [command, ...prev].slice(0, 10))
     } catch (err) {
       setError(`Execution error: ${err instanceof Error ? err.message : String(err)}`)
@@ -327,23 +311,11 @@ export default function Home() {
               )}
             </div>
 
-            {/* Preview and Execute Panel */}
+            {/* Execute Panel */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium">Command Actions</h3>
               <div className="flex gap-2">
-                {/* <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button variant="outline" onClick={previewCommand} className="flex-1">
-                        <Eye className="mr-2 h-4 w-4" />
-                        Preview
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Preview the command without executing it</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider> */}
+           
 
                 <TooltipProvider>
                   <Tooltip>
@@ -369,7 +341,6 @@ export default function Home() {
 
               <div defaultValue="output">
                 <div className="grid w-full grid-cols-2">
-                  {/* <TabsTrigger value="output">Output</TabsTrigger> */}
                   <p >History</p>
                 </div>
                 <div >
