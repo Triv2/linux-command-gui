@@ -1,14 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Terminal, Play, Eye, AlertCircle, BookOpen } from "lucide-react"
+import { Terminal, Play, AlertCircle, BookOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
@@ -110,22 +110,22 @@ export default function Home() {
     return command.trim()
   }
 
-  const previewCommand = () => {
-    const command = constructCommand()
-    if (!command) {
-      setError("Please select a command first")
-      return
-    }
+  // const previewCommand = () => {
+  //   const command = constructCommand()
+  //   if (!command) {
+  //     setError("Please select a command first")
+  //     return
+  //   }
 
-    const validationError = validateCommand(command)
-    if (validationError) {
-      setError(validationError)
-      return
-    }
+  //   const validationError = validateCommand(command)
+  //   if (validationError) {
+  //     setError(validationError)
+  //     return
+  //   }
 
-    setCommandOutput(`Preview: ${command}`)
-    setError("")
-  }
+  //   setCommandOutput(`Preview: ${command}`)
+  //   setError("")
+  // }
 
   const runCommand = async () => {
     const command = constructCommand()
@@ -144,7 +144,6 @@ export default function Home() {
     setError("")
 
     try {
-      // In a real application, this would execute the command on the server
       const output = await executeCommand(command)
       setCommandOutput(output)
       setCommandHistory((prev) => [command, ...prev].slice(0, 10))
@@ -202,13 +201,14 @@ export default function Home() {
     <main className="container mx-auto p-4 max-w-6xl">
       <Card className="mb-6">
         <CardHeader className="bg-primary text-primary-foreground">
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 pt-1">
             <Terminal className="h-6 w-6" />
             Linux Command Builder
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
             {/* Command Selection Panel */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium">Select Command</h3>
@@ -236,7 +236,7 @@ export default function Home() {
               )}
 
               <div className="mt-4">
-                <Label htmlFor="arguments">Arguments</Label>
+                <Label className="p-1" htmlFor="arguments">Arguments</Label>
                 <Input
                   id="arguments"
                   placeholder="e.g., file1.txt file2.txt"
@@ -331,7 +331,7 @@ export default function Home() {
             <div className="space-y-4">
               <h3 className="text-lg font-medium">Command Actions</h3>
               <div className="flex gap-2">
-                <TooltipProvider>
+                {/* <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button variant="outline" onClick={previewCommand} className="flex-1">
@@ -343,7 +343,7 @@ export default function Home() {
                       <p>Preview the command without executing it</p>
                     </TooltipContent>
                   </Tooltip>
-                </TooltipProvider>
+                </TooltipProvider> */}
 
                 <TooltipProvider>
                   <Tooltip>
@@ -354,7 +354,7 @@ export default function Home() {
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Execute the command (simulated in this demo)</p>
+                      <p>Execute the command </p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -367,21 +367,12 @@ export default function Home() {
                 </Alert>
               )}
 
-              <Tabs defaultValue="output">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="output">Output</TabsTrigger>
-                  <TabsTrigger value="history">History</TabsTrigger>
-                </TabsList>
-                <TabsContent value="output">
-                  <Card>
-                    <CardContent className="p-4">
-                      <ScrollArea className="h-[200px] w-full rounded-md border p-4 font-mono text-sm">
-                        {commandOutput || "Command output will appear here"}
-                      </ScrollArea>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-                <TabsContent value="history">
+              <div defaultValue="output">
+                <div className="grid w-full grid-cols-2">
+                  {/* <TabsTrigger value="output">Output</TabsTrigger> */}
+                  <p >History</p>
+                </div>
+                <div >
                   <Card>
                     <CardContent className="p-4">
                       <ScrollArea className="h-[200px] w-full rounded-md border">
@@ -403,8 +394,8 @@ export default function Home() {
                       </ScrollArea>
                     </CardContent>
                   </Card>
-                </TabsContent>
-              </Tabs>
+                </div>
+              </div>
             </div>
           </div>
         </CardContent>
