@@ -14,7 +14,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { commandData } from "@/lib/command-data"
-import { executeCommand, validateCommand } from "@/lib/command-processor"
+import {  validateCommand } from "@/lib/command-processor"
 
 interface OptionArgument {
   flag: string
@@ -27,7 +27,7 @@ export default function Home() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([])
   const [optionArguments, setOptionArguments] = useState<OptionArgument[]>([])
   const [commandHistory, setCommandHistory] = useState<string[]>([])
-  const [commandOutput, setCommandOutput] = useState("")
+  // const [commandOutput, setCommandOutput] = useState("")
   const [error, setError] = useState("")
   const [isExecuting, setIsExecuting] = useState(false)
   const [livePreview, setLivePreview] = useState("")
@@ -144,8 +144,8 @@ export default function Home() {
     setError("")
 
     try {
-      const output = await executeCommand(command)
-      setCommandOutput(output)
+      // const output = await executeCommand(command)
+      // // setCommandOutput(output)
       setCommandHistory((prev) => [command, ...prev].slice(0, 10))
     } catch (err) {
       setError(`Execution error: ${err instanceof Error ? err.message : String(err)}`)
